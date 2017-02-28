@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   
+  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<link rel="stylesheet" type="text/css" href="ext-all.css">    
+  
+  
+<title>无标题文档</title>  
+</head>  
+<script type="text/javascript" src="ext-base.js"></script>  
+<script type="text/javascript" src="ext-all.js"></script>  
+
+
+<script type="text/javascript">  
+Ext.namespace("Ext.ux");
+Ext.ux.ToastWindowMgr = {
+    positions: [] 
+};
+Ext.ux.ToastWindow =Ext.extend(Ext.Window, {
+    initComponent: function(){
+          Ext.apply(this, {
+            width: 420,
+            height: 150,
+            plain: false,
+            shadow:false,
+            resizable:false,
+            closeAction:'hide', //默认关闭为隐藏  
+            closable: true
+          });
+        this.task = new Ext.util.DelayedTask(this.hide, this);
+        Ext.ux.ToastWindow.superclass.initComponent.call(this);
+    },
+    constructor: function(conf){  
+        Ext.Window.superclass.constructor.call(this, conf); 
+        var doc = document, bd = (doc.body || doc.documentElement);  
+        var left = bd.scrollLeft + Ext.lib.Dom.getViewWidth()-4-this.width;  
+        var top = bd.scrollTop + Ext.lib.Dom.getViewHeight()-4-this.height;  
+        this.setPosition(left,top); 
+       }
+
+}); 
+
+function loadData(){
+	
+    if (win) {
+        win.close();
+
+    }
+	var htmlStr='<table id="messageTable">';
+		htmlStr+='<tr id="message_1">';
+		htmlStr+='<td style="font-size:10px;">发送人:</td><td>李会计</td>';
+		htmlStr+='<td style="font-size:10px;">内容:</td><td>撒飒飒</td>';
+		htmlStr+='<td style="font-size:10px;">发送时间:</td<td>2017年2月28日16:43:38</td>';
+		
+	   htmlStr+='</table>';
+	   win= new Ext.ux.ToastWindow({
+		    title: '消息',
+		    autoScroll: true,  
+			html: htmlStr,
+		}).show(document);
+}
+var win;
+Ext.onReady(function () {
+    var task = {
+    run: function () {
+    	loadData();	
+        },
+        interval: 30000
+    }
+    var runner = new Ext.util.TaskRunner();
+    runner.start(task);
+});
+</script>  
+</head>  
+
+</html>  
